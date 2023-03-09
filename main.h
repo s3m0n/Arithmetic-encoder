@@ -56,6 +56,12 @@ std::pair<std::pair<long double, long double>, bool> EncodeFunc(unsigned char a,
 
 void encode(std::string inputFile, std::string outputFile) {
 	std::ifstream file(inputFile, std::ios::binary);
+
+	if (!file.is_open()) {
+		std::cout << "Error. Input file does not exist" << std::endl;
+		return;
+	}
+
 	std::map<unsigned char, unsigned int> freqTable;
 	std::map<unsigned char, long double> possibTable;
 	unsigned int size = 0;
@@ -117,6 +123,11 @@ void encode(std::string inputFile, std::string outputFile) {
 void decode(std::string inputFile, std::string outputFile) {
 	std::ifstream ifs(inputFile, std::ios::binary);
 	std::ofstream ofs(outputFile, std::ios::binary);
+
+	if (!ifs.is_open()) {
+		std::cout << "Error. Input file does not exist" << std::endl;
+		return;
+	}
 
 	std::map<unsigned char, unsigned int> freqTable;
 	std::map<unsigned char, long double> possibTable;
