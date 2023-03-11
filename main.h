@@ -6,8 +6,8 @@
 #include <fstream>
 
 bool cmpDoubles15(long double n1, long double n2) {
-	long long a = (n1 * 1000000000000000);
-	long long b = (n2 * 1000000000000000);
+	unsigned long long a = (n1 * 10000000000000000000);
+	unsigned long long b = (n2 * 10000000000000000000);
 	if (a == b) return true;
 	return false;
 }
