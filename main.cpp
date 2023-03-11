@@ -1,6 +1,8 @@
 #include "main.h"
 
 int main() {
+    setlocale(LC_ALL, "Russian");
+
     int mode;
     std::cout << "Select mode. For encoding enter 0, for decoding enter 1: ";
     std::cin >> mode;
