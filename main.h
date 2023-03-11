@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <fstream>
 
-int N = 0;
+//
 
 bool cmpDoubles(long double n1, long double n2) {
 	unsigned long long a = (n1 * 1000000000000000000);
