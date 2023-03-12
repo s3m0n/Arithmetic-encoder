@@ -16,6 +16,7 @@ bool cmpDoubles(long double n1, long double n2) {
 
 std::pair<unsigned char, std::pair<long double, long double>> decodeFunc(long double c, std::map<unsigned char, long double> possibTable, std::pair<long double, long double> borders) {
 	long double k = borders.first;
+	
 	for (const auto& elem : possibTable) {
 		long double oldK = k;
 		k = (borders.second - borders.first) * elem.second + k;
@@ -32,13 +33,24 @@ std::pair<std::pair<long double, long double>, bool> EncodeFunc(unsigned char a,
 		long double oldK = k;
 		k = (borders.second - borders.first) * elem.second + k;
 		if (a == elem.first) {
-			if(cmpDoubles(oldK, k)) {
+			if (cmpDoubles(oldK, k)) {
 				return std::make_pair(std::make_pair(oldK, k), true);
 			}
 			return std::make_pair(std::make_pair(oldK, k), false);
 		}
 	}
 	return std::make_pair(std::make_pair(-1.0, -1.0), false);
+}
+
+bool isok(long double cell, std::map<unsigned char, long double>& possibTable) {
+	std::pair<unsigned char, std::pair<long double, long double>> borders = std::make_pair(0, std::make_pair(0.0, 1.0));
+	while (true) {
+		borders = decodeFunc(cell, possibTable, borders.second);
+		if (borders.first == 0) {
+			return false;
+		}
+		if (cell == borders.second.second) return true;;
+	}
 }
 
 void encode(std::string inputFile, std::string outputFile) {
@@ -90,7 +102,7 @@ void encode(std::string inputFile, std::string outputFile) {
 		ifs.read((char*)&cell, sizeof(cell));
 		std::pair<std::pair<long double, long double>, bool> newborders = EncodeFunc(cell, possibTable, borders.first);
 		counter++;
-		
+
 		if ((newborders.second || counter == size) && newborders.first.first != -1.0) {
 			long double res = borders.first.second;
 			ofs.write((char*)&res, sizeof(res));
@@ -149,6 +161,9 @@ void decode(std::string inputFile, std::string outputFile) {
 		std::pair<unsigned char, std::pair<long double, long double>> borders = std::make_pair(0, std::make_pair(0.0, 1.0));
 		while (counter < size) {
 			borders = decodeFunc(cell, possibTable, borders.second);
+			if (borders.first == 0) {
+				break;
+			}
 			ofs.write((char*)&borders.first, sizeof(unsigned char));
 			counter++;
 			if (cell == borders.second.second) break;
@@ -157,3 +172,4 @@ void decode(std::string inputFile, std::string outputFile) {
 	ifs.close();
 	ofs.close();
 }
+
